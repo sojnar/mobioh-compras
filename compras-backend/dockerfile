@@ -1,0 +1,20 @@
+From ubuntu:22.04
+
+ARG MOBIOH_HOME_JAR=/mobioh/programas/bin
+ARG MOBIOH_SERVICE=/mobioh/programas/service
+
+ADD http://erp.mobioh.com.br/ultimaversao/mobioh.zip /
+ADD http://erp.mobioh.com.br/ultimaversao/compras.jar ${MOBIOH_HOME_JAR}/
+
+RUN apt update && \
+    apt -y install zip \
+    unzip \
+    htop \
+    net-tools 
+RUN unzip mobioh.zip 
+
+COPY service.sh /docker-entrypoint.d/
+
+RUN chmod +x /docker-entrypoint.d/service.sh
+
+CMD ["bash", "-c", "/docker-entrypoint.d/service.sh"]
